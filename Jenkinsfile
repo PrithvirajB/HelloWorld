@@ -1,3 +1,4 @@
+def gv
 pipeline {
     agent any
     
@@ -9,10 +10,19 @@ pipeline {
         booleanParam(name: 'executeTests', defaultValue: true, description: '')
     }
     stages {
+	stage('init') {
+            steps{
+                script {
+                    gv = load "script.groovy"
+                }
+            }
+        }
         stage('build') {
             steps{
                 sh 'mvn clean install'
                 echo 'building...'
+		gv.buildApp()
+
             }
         }
         stage('test') {
